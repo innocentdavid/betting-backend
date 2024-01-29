@@ -42,13 +42,14 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         // origin: 'https://humble-halibut-4wv5p96jj427pg9-5173.app.github.dev',
-        origin: 'http://127.0.0.1:5173',
+        // origin: 'http://127.0.0.1:5173',
+        origin: '*',
         methods: ['GET', 'POST'],
     },
 });
 
 const CHAT_BOT = 'ChatBot';
-let chatRoom = ''; // E.g. javascript, node,...
+// let chatRoom = '';
 let allUsers = []; // All users in current chat room
 
 io.on('connection', (socket) => {
@@ -466,6 +467,16 @@ function deposit_hamster(deposit_amount, deposit_pebble_num, bettor) {
     return 1;
 }
 
+app.get('/', (req, res) => {
+    console.log('/ visited');
+    res.send('Hello world');
+});
+
+app.post('/ping', (req, res) => {
+    console.log('pinged!');
+    return res.json({ message: 'ping successful!', ...req.body });
+});
+
 app.get("/init", (req, res) => {
     console.log("Init Setting!!!");
     let betting_name = req.query.query;
@@ -685,7 +696,8 @@ app.get("/bettingStart", (req, res) => {
     }
     res.send("Betting Successfully Start!!!");
 });
+
 // Start the server
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+app.listen(PORT, () => {
+    console.log("Server running on port "+PORT);
 });
